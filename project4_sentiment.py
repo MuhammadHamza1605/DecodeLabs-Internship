@@ -1,14 +1,3 @@
-"""
-============================================================
-  DecodeLabs | AI Industrial Training Kit | Batch 2026
-  PROJECT 4: AI-Powered Sentiment Analysis
-  Goal    : Classify text as Positive / Negative / Neutral
-  Method  : NLP pipeline — TF-IDF + Logistic Regression
-  Skills  : NLP, text preprocessing, multi-class
-            classification, real-world AI deployment pattern
-============================================================
-"""
-
 import re
 import numpy as np
 import matplotlib
@@ -140,9 +129,7 @@ NEG_LEXICON = {"terrible","worst","horrible","awful","disgusting","useless",
                "waste","furious","regret","disaster","nightmare","hatred"}
 
 
-# ═══════════════════════════════════════════════════════════════
 #  NLP PREPROCESSING
-# ═══════════════════════════════════════════════════════════════
 def preprocess(text: str) -> str:
     text = text.lower()
     text = re.sub(r"http\S+|www\S+|\S+@\S+", "", text)
@@ -159,9 +146,7 @@ def lexicon_signal(text: str) -> str:
     return "neutral"
 
 
-# ═══════════════════════════════════════════════════════════════
 #  MODEL TRAINING
-# ═══════════════════════════════════════════════════════════════
 def train_model():
     print("\n" + "="*62)
     print("  PROJECT 4 — AI Sentiment Analysis")
@@ -238,9 +223,7 @@ def predict_sentiment(text: str, clf, vectorizer) -> dict:
     }
 
 
-# ═══════════════════════════════════════════════════════════════
 #  VISUALISATION DASHBOARD
-# ═══════════════════════════════════════════════════════════════
 def plot_dashboard(acc, f1, cm, y_test, preds, sample_results, output_path):
     BG   = "#F7F9FC"
     DARK = "#1B2631"
@@ -327,9 +310,7 @@ def plot_dashboard(acc, f1, cm, y_test, preds, sample_results, output_path):
     plt.close()
 
 
-# ═══════════════════════════════════════════════════════════════
 #  INTERACTIVE ANALYSER
-# ═══════════════════════════════════════════════════════════════
 DEMO = [
     "This AI course is absolutely fantastic I learned so much!",
     "The product broke after two days complete waste of money.",
@@ -381,9 +362,7 @@ def run_analyser(clf, vectorizer):
     return sample_results
 
 
-# ─────────────────────────────────────────────
 #  ENTRY POINT
-# ─────────────────────────────────────────────
 if __name__ == "__main__":
     clf, vectorizer, acc, f1, cm, X_test, y_test, preds = train_model()
     sample_results = run_analyser(clf, vectorizer)
