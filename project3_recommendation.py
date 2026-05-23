@@ -1,12 +1,4 @@
-"""
-============================================================
-  DecodeLabs | AI Industrial Training Kit | Batch 2026
-  PROJECT 3: AI Recommendation Logic
-  System    : Tech Stack Recommender (Content-Based Filtering)
-  Algorithm : TF-IDF Vectorization + Cosine Similarity
-  Pipeline  : Ingest → Score → Sort → Filter (Top-N)
-============================================================
-"""
+
 
 import numpy as np
 import matplotlib
@@ -16,11 +8,9 @@ import matplotlib.cm as cm
 from collections import defaultdict
 import math
 
-# ─────────────────────────────────────────────
 #  THE KNOWLEDGE BASE — Job Role Catalog
 #  Each role is defined by its skill "document"
 #  (tags are the vocabulary of this domain)
-# ─────────────────────────────────────────────
 JOB_CATALOG = {
     "Data Scientist": [
         "python", "sql", "machine learning", "statistics", "pandas",
@@ -72,11 +62,9 @@ JOB_CATALOG = {
     ],
 }
 
-# ─────────────────────────────────────────────
 #  TF-IDF ENGINE  (from scratch — no sklearn)
 #  Term Frequency × Inverse Document Frequency
 #  Rewards specific terms, penalizes generic ones
-# ─────────────────────────────────────────────
 
 def build_vocabulary(catalog: dict) -> list:
     """Collect every unique skill across all job roles."""
@@ -141,20 +129,18 @@ ROLE_VECTORS    = {
 }
 
 
-# ═══════════════════════════════════════════════════════════════
 #  THE 4-STEP RANKING PIPELINE
 #  Step 1: Ingest   — capture user profile
 #  Step 2: Score    — cosine similarity vs all roles
 #  Step 3: Sort     — descending by score
 #  Step 4: Filter   — Top-N to prevent choice overload
-# ═══════════════════════════════════════════════════════════════
 
 def recommend(user_skills: list, top_n: int = 3) -> list:
     """
     Core recommendation engine.
     Returns Top-N (role, score) tuples sorted by cosine similarity.
     """
-    # ── Step 1: INGEST ──────────────────────────────────────
+    # ── Step 1: INGEST
     # Normalize user input to match our vocabulary
     user_skills_clean = [s.lower().strip() for s in user_skills]
 
@@ -167,22 +153,20 @@ def recommend(user_skills: list, top_n: int = 3) -> list:
     # Build user profile vector (treated as a 1-doc TF-IDF)
     user_vector = compute_tfidf_vector(user_skills_clean, IDF, VOCABULARY)
 
-    # ── Step 2: SCORE ──────────────────────────────────────
+    # ── Step 2: SCORE
     scored = [
         (role, cosine_similarity(user_vector, role_vec))
         for role, role_vec in ROLE_VECTORS.items()
     ]
 
-    # ── Step 3: SORT ──────────────────────────────────────
+    # ── Step 3: SORT
     scored.sort(key=lambda x: x[1], reverse=True)
 
-    # ── Step 4: FILTER ─────────────────────────────────────
+    # ── Step 4: FILTER
     return [(role, round(score, 4)) for role, score in scored[:top_n]]
 
 
-# ─────────────────────────────────────────────
 #  VISUALISATION — Recommendation Dashboard
-# ─────────────────────────────────────────────
 
 def plot_results(user_skills: list, results: list, output_path: str):
     """Generate a professional 3-panel recommendation dashboard."""
@@ -196,7 +180,7 @@ def plot_results(user_skills: list, results: list, output_path: str):
         fontsize=13, fontweight="bold", color=DARK, y=0.99
     )
 
-    # ── Panel A: All roles ranked (full bar chart) ────────────
+    # ── Panel A: All roles ranked (full bar chart) 
     ax1 = fig.add_subplot(1, 3, (1, 2))
 
     # Score all roles for the full ranking view
@@ -282,9 +266,7 @@ def plot_results(user_skills: list, results: list, output_path: str):
     plt.close()
 
 
-# ═══════════════════════════════════════════════════════════════
 #  INTERACTIVE SESSION
-# ═══════════════════════════════════════════════════════════════
 
 def run_recommender():
     print("\n" + "="*62)
@@ -297,7 +279,7 @@ def run_recommender():
               "javascript", "deep learning", "react", "kubernetes", "nlp"]
     print(f"  {', '.join(sample)} ... and more\n")
 
-    # ── INGESTION STEP: minimum 3 inputs ─────────────────────
+    # ── INGESTION STEP: minimum 3 inputs
     user_skills = []
     print("  Enter at least 3 skills (one per line). Press Enter twice when done.")
     print("─"*62)
