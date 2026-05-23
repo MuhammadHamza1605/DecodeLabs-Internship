@@ -1,12 +1,4 @@
-"""
-============================================================
-  DecodeLabs | AI Industrial Training Kit | Batch 2026
-  PROJECT 2: Data Classification Using AI
-  Algorithm : K-Nearest Neighbors (KNN)
-  Dataset   : Iris Benchmark (150 samples, 3 classes, 4 features)
-  Pipeline  : Load → Scale → Split → Train → Predict → Evaluate
-============================================================
-"""
+
 
 import numpy as np
 import matplotlib
@@ -27,9 +19,7 @@ from sklearn.metrics         import (
 )
 
 
-# ─────────────────────────────────────────────
 #  STYLING
-# ─────────────────────────────────────────────
 COLORS   = ["#1B4F72", "#E74C3C", "#27AE60"]
 BG_COLOR = "#F0F4F8"
 plt.rcParams.update({
@@ -40,9 +30,7 @@ plt.rcParams.update({
 })
 
 
-# ═══════════════════════════════════════════════════════════════
 #  PHASE 1 — INPUT: LOAD & EXPLORE THE IRIS BENCHMARK DATASET
-# ═══════════════════════════════════════════════════════════════
 print("\n" + "="*60)
 print("  PROJECT 2 — Data Classification Using AI (KNN)")
 print("  DecodeLabs | Batch 2026")
@@ -61,11 +49,10 @@ print(f"   Dimensions : {X.shape[1]} features")
 print(f"   Features   : {feat_n}")
 
 
-# ═══════════════════════════════════════════════════════════════
 #  PHASE 2 — PROCESS STEP A: FEATURE SCALING (Gatekeeper Rule)
 #  StandardScaler → Mean=0, Variance=1
 #  Removes bias from different measurement scales
-# ═══════════════════════════════════════════════════════════════
+
 scaler   = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
@@ -74,11 +61,11 @@ print(f"   Raw sepal_length range : [{X[:,0].min():.1f}, {X[:,0].max():.1f}] cm"
 print(f"   Scaled range           : [{X_scaled[:,0].min():.2f}, {X_scaled[:,0].max():.2f}]")
 
 
-# ═══════════════════════════════════════════════════════════════
+
 #  PHASE 2 — PROCESS STEP B: TRAIN-TEST SPLIT
 #  80% Training (Pattern Recognition) | 20% Testing (Validation)
 #  shuffle=True removes order bias
-# ═══════════════════════════════════════════════════════════════
+
 X_train, X_test, y_train, y_test = train_test_split(
     X_scaled, y,
     test_size    = 0.20,
@@ -91,11 +78,9 @@ print(f"\n✂️  Train-Test Split: 80% / 20%")
 print(f"   Training samples : {len(X_train)}")
 print(f"   Testing  samples : {len(X_test)}")
 
-
-# ═══════════════════════════════════════════════════════════════
 #  PHASE 2 — PROCESS STEP C: K TUNING (Find Optimal K)
 #  Test K from 1 to 20, pick the elbow point
-# ═══════════════════════════════════════════════════════════════
+
 print(f"\n🔍 Searching for Optimal K (1–20)...")
 error_rates = []
 
@@ -118,10 +103,8 @@ model.fit(X_train, y_train)          # FIT: memorise the map
 predictions = model.predict(X_test)  # PREDICT: apply logic
 
 
-# ═══════════════════════════════════════════════════════════════
 #  PHASE 3 — OUTPUT: EVALUATION METRICS
 #  Accuracy | Confusion Matrix | F1 Score
-# ═══════════════════════════════════════════════════════════════
 acc    = accuracy_score(y_test, predictions)
 f1     = f1_score(y_test, predictions, average="weighted")
 cm     = confusion_matrix(y_test, predictions)
@@ -136,9 +119,7 @@ print(f"\n  Classification Report:")
 print(report)
 
 
-# ═══════════════════════════════════════════════════════════════
 #  VISUALISATION — 4-panel dashboard
-# ═══════════════════════════════════════════════════════════════
 fig = plt.figure(figsize=(16, 12), facecolor=BG_COLOR)
 fig.suptitle(
     "PROJECT 2 — Data Classification Using KNN | DecodeLabs Batch 2026",
@@ -159,7 +140,7 @@ ax1.set_ylabel("Error Rate")
 ax1.legend()
 ax1.grid(True, alpha=0.3)
 
-# ── Panel 2: Confusion Matrix ───────────────────────────────
+# ── Panel 2: Confusion Matrix
 ax2 = fig.add_subplot(2, 2, 2)
 sns.heatmap(
     cm, annot=True, fmt="d", cmap="Blues",
@@ -184,7 +165,7 @@ ax3.set_ylabel("Petal Width (cm)")
 ax3.legend()
 ax3.grid(True, alpha=0.3)
 
-# ── Panel 4: Per-Class F1 Scores ────────────────────────────
+# ── Panel 4: Per-Class F1 Scores
 ax4 = fig.add_subplot(2, 2, 4)
 per_class_f1 = f1_score(y_test, predictions, average=None)
 bars = ax4.bar(names, per_class_f1, color=COLORS, edgecolor="white",
@@ -201,7 +182,7 @@ for bar, val in zip(bars, per_class_f1):
              f"{val:.3f}", ha="center", va="bottom", fontsize=10)
 ax4.grid(True, alpha=0.3, axis="y")
 
-# ── Metrics Banner ───────────────────────────────────────────
+# ── Metrics Banner 
 fig.text(0.5, 0.01,
          f"Model: KNN (K={optimal_k})  |  Accuracy: {acc*100:.2f}%  "
          f"|  F1 Score: {f1:.4f}  |  Test Samples: {len(X_test)}",
